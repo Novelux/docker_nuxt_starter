@@ -1,0 +1,10 @@
+#!/usr/bin/env node
+var app = require("../app");
+const fs = require("fs");
+const https = require("https");
+const moment = require("moment");
+
+app.set("port", process.env.PORT || 4200);
+var server = app.listen(app.get("port"), function () {
+  console.log("HTTP server listening on port " + server.address().port);
+});

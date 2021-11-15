@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  db:
+    image: mariadb:10.6.2
+    restart: always
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=HelloGoodJob1!
+    volumes:
+      - ./data:/var/lib/mysql
+
+  api:
+    image: ${SERVICE}/api:${CI_COMMIT_TAG:-latest}
+    build:
+      context: ./base/api
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=maindb
+      - DATABASE_USER=root
+      - DATABASE_PASSWD=HelloGoodJob1!
+
+  api2:
+    image: ${SERVICE}/api2:${CI_COMMIT_TAG:-latest}
+    build:
+      context: ./base/api2
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "4200:4200"
+    depends_on:
+      - db
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=maindb
+      - DATABASE_USER=root
+      - DATABASE_PASSWD=HelloGoodJob1!
+
+  spa:
+    image: ${SERVICE}/spa:${CI_COMMIT_TAG:-latest}
+    build:
+      context: ./base/spa
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8081:3000"
+    environment:
+      - BROWSER_BASE_URL=http://localhost:4000
+      - BASE_URL=http://localhost:4000
