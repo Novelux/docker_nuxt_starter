@@ -10,13 +10,14 @@ services:
       - 3306
     environment:
       - MARIADB_ROOT_PASSWORD=HelloGoodJob1!
+      - MARIADB_DATABASE=maindb
     volumes:
       - ./data:/var/lib/mysql
 
   api:
     image: ${SERVICE}/api:${CI_COMMIT_TAG:-latest}
     build:
-      context: ./base/api
+      context: ./src/api
       dockerfile: Dockerfile
     restart: always
     ports:
@@ -32,7 +33,7 @@ services:
   api2:
     image: ${SERVICE}/api2:${CI_COMMIT_TAG:-latest}
     build:
-      context: ./base/api2
+      context: ./src/api2
       dockerfile: Dockerfile
     restart: always
     ports:
@@ -48,7 +49,7 @@ services:
   spa:
     image: ${SERVICE}/spa:${CI_COMMIT_TAG:-latest}
     build:
-      context: ./base/spa
+      context: ./src/spa
       dockerfile: Dockerfile
     restart: always
     ports:
